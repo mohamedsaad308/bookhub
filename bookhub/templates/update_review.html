@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}
+    {{ title }}
+{% endblock title %}
+{% block content %}
+    <div class="content-section">
+        <!-- Review form here  -->
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Update Review</legend>
+                <div class="form-group">
+                    {{ form.book_rate.label(class="form-control-label") }}
+                    {% if form.book_rate.errors %}
+                        {{ form.book_rate(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.book_rate.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.book_rate(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.book_review.label(class="form-control-label") }}
+                    {% if form.book_review.errors %}
+                        {{ form.book_review(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.book_review.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.book_review(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn btn-primary") }}
+            </div>
+            <small>
+                <p>{{ id }}</p>
+            </small>
+        </form>
+    </div>
+{% endblock  %}

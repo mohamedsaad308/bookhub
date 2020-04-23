@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% block title %}
+    {{ title }}
+{% endblock title %}
+{% block content %}
+    <div class="container">
+        <div class="row content-section">
+            <div class="col-md">
+                <section class="media book showcase" data-isbn="00h470654X">
+                    <header>
+                      <h1 class="book_title">{{ book.title }}</h1>
+                      <h3 class="book_author">{{ book.author }}</h3>
+                    </header>
+                    <ul class="book-info">
+                        <li>ISBN: {{ book.isbn }}</li>
+                        <li>Year: {{ book.year }}</li>
+                        <li>Review count:(Goodreads): {{ review_count_goodreads }}</li>
+                        <li>Average rate:(Goodreads): {{ goodreads_avg_rate }}</li>
+                    </ul>
+                </section>
+            </div>
+            <div class="col-md-4">
+                <img src="{{ book_cover }}" alt="" class="thumbnail img-fluid img-thumbnail" /> 
+            </div>
+        </div>
+        <div class="row content-section">
+            <div class="col-md">
+                <section>
+                    <header><h5>Description</h5></header>
+                    <article class="article-text">{{ book_description }}</article>
+                </section>
+            </div>
+
+        </div>
+        <div class="row content-section">
+            <div class="col-md-8">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Review this book</legend>
+                        <div class="form-group">
+                            {{ form.book_rate.label(class="form-control-label") }}
+                            {% if form.book_rate.errors %}
+                                {{ form.book_rate(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.book_rate.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.book_rate(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.book_review.label(class="form-control-label") }}
+                            {% if form.book_review.errors %}
+                                {{ form.book_review(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.book_review.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.book_review(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+        
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- view reviews section  -->
+        <div class="row">
+            <div class="col-md-12">
+                {% for review in reviews %}
+                <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title"><a href="{{ url_for('account') }}">{{ review.user.username }}</a> rated this book {{ review.rate }} out of 5</h5>
+                      <h6 class="text-muted time">{{ review.review_time.strftime('%Y-%m-%d') }}</h6>
+                      <p class="card-text">{{ review.body }}</p>
+                      {% if review.user==current_user %}
+                        <a class="btn btn-secondary btn-sm mth4 mbh4" href="{{ url_for('update_review', review_id=review.id)}}">Update</a>
+                        <button type="button" class="btn btn-danger btn-sm mh4" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                      {% endif %}
+                      
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="h1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Review?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="{{ url_for('delete_review', review_id=review.id)}}"method="POST">
+                            <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        {% endfor %}
+
+            </div>
+        </div>
+{% endblock  %}
+<!-- .strftime('%Y-%m-%d') -->

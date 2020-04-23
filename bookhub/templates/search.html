@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block title %}
+    Search Books
+{% endblock title %}
+{% block content %}
+            <!-- FORM HERE -->
+            <div class="conainer">
+                <div class="row justify-content-md-center">
+                    <div class="col-md-8">
+                        <div class="content-section">
+                            <form action="" method="POST">
+                                {{ form.csrf_token }}
+                                <fieldset class="form-group">
+                                  <legend >Search our books!</legend>
+                                  <div class="form-group">
+                                    {{ form.searchby.label(class="form-control-label") }}
+                                    {% if form.searchby.errors  %}
+                                      {{ form.searchby(class="form-control form-control-lg is-invalid") }}
+                                      {% for error in form.searchby.errors  %}
+                                        <div class="invalid-feedback">
+                                          <span>{{ error }}</span>
+                                        </div>
+                                          
+                                      {% endfor %}
+                                    
+                                    {% else %}
+                                        {{ form.searchby(class="form-control form-control-lg") }}
+                                    {% endif %}
+                                  </div>
+                                  <div class="form-group">
+                                    {{ form.searchword.label(class="form-control-label") }}
+                                    {% if form.searchword.errors %}
+                                    {{ form.searchword(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.searchword.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.searchword(class="form-control form-control-lg") }}
+                                {% endif %}
+                                  </div>
+                                 
+                                </fieldset>
+                                <div class="form-group">
+                                    {{ form.submit(class="btn btn btn-primary") }}
+                                </div>
+                            </form>
+                        </div>
+                        <small text="muted">
+                            <span> {{ test }}</span>
+                            <br>
+                            <span> {{ searchword }}</span>
+                        </small>
+                        {% if books %}
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <th scope='col'>Title</th>
+                                    <th scope='col'>Author</th>
+                                    <th scope='col'>Year</th>
+                                    <th scope='col'>ISBN</th>
+                                </thead>
+                                <tbody>
+                                    {% for book  in books %}
+                                        <tr>
+                                            <td > <a href="{{ url_for('book', book_id=book.id) }}">{{ book.title }}</a> </td>
+                                            <td>{{ book.author }}</td>
+                                            <td>{{ book.year }}</td>
+                                            <td><a href="{{ url_for('book_api', book_id=book.id) }}">{{ book.isbn }}</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                
+                        {% endif %}
+                
+                    </div>
+                </div>
+            </div>
+ 
+
+{% endblock  %}
