@@ -193,7 +193,7 @@ ul.book-info {
   font-weight: 600;
 }
 .subtitle {
-  color: #fff;
+  color: #333333;
   opacity: 0.7;
   font-size: 18px;
   line-height: 1.5em;
@@ -204,7 +204,7 @@ ul.book-info {
   line-height: 1.3em;
   font-family: "PT Serif", Georgia, Times, serif;
   font-weight: 400;
-  color: #fff;
+  color: rgb(13, 8, 14);
   align-self: center;
   margin-top: 100px;
   margin-bottom: 20px;

@@ -74,19 +74,21 @@ def logout():
 def search():
     form = SearchForm()
     books =[]
+    page = request.args.get('page', 1, type=int)
     if form.validate_on_submit():
         searchword_like = f"%{form.searchword.data}%"
         if form.searchby.data=='title':
-            books = Book.query.filter(Book.title.like(searchword_like)).all()
+            books = Book.query.filter(Book.title.like(searchword_like)).paginate(page=page, per_page=5)
         elif form.searchby.data=='isbn':
-            books = Book.query.filter(Book.isbn.like(searchword_like)).all()
+            books = Book.query.filter(Book.isbn.like(searchword_like)).paginate(page=page, per_page=5)
         elif form.searchby.data=='author':
-            books = Book.query.filter(Book.author.like(searchword_like)).all()
+            books = Book.query.filter(Book.author.like(searchword_like)).paginate(page=page, per_page=5)
         elif form.searchby.data=='year':
-            books = Book.query.filter(Book.year.like(searchword_like)).all()
-        if len(books)==0:
+            books = Book.query.filter(Book.year.like(searchword_like)).paginate(page=page, per_page=5)
+        if books is None:
             
-            flash('No books matched your search, change your search and try again', 'warning')  
+            flash('No books matched your search, change your search and try again', 'warning')
+
     # elif request.method=='GET':
     #     books =[]
     #     # test='I came here with get method'
@@ -196,7 +198,7 @@ def books_api(book_id):
     review_count = data['books'][0]['work_ratings_count']
     bookhub_review_count = sql.execute("SELECT * FROM reviews WHERE book_id = :id", {"id": book_id}).rowcount
     if bookhub_review_count==0:
-        bookhub_review_average="No reviews Yes"
+        bookhub_review_average="No reviews Yet"
     else:
         bookhub_review_average_rowproxy = sql.execute("SELECT AVG(rate) FROM reviews WHERE book_id = :id", {"id": book_id})
         d, a = {}, []
